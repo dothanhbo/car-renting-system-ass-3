@@ -1,0 +1,14 @@
+C:\Users\ADMIN\Desktop\DoThanhBo_Net1606_A03\DataAccessObject\bin\Debug\net6.0\DataAccessObject.deps.json
+C:\Users\ADMIN\Desktop\DoThanhBo_Net1606_A03\DataAccessObject\bin\Debug\net6.0\DataAccessObject.dll
+C:\Users\ADMIN\Desktop\DoThanhBo_Net1606_A03\DataAccessObject\bin\Debug\net6.0\DataAccessObject.pdb
+C:\Users\ADMIN\Desktop\DoThanhBo_Net1606_A03\DataAccessObject\obj\Debug\net6.0\DataAccessObject.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\ADMIN\Desktop\DoThanhBo_Net1606_A03\DataAccessObject\obj\Debug\net6.0\DataAccessObject.AssemblyInfoInputs.cache
+C:\Users\ADMIN\Desktop\DoThanhBo_Net1606_A03\DataAccessObject\obj\Debug\net6.0\DataAccessObject.AssemblyInfo.cs
+C:\Users\ADMIN\Desktop\DoThanhBo_Net1606_A03\DataAccessObject\obj\Debug\net6.0\DataAccessObject.csproj.CoreCompileInputs.cache
+C:\Users\ADMIN\Desktop\DoThanhBo_Net1606_A03\DataAccessObject\obj\Debug\net6.0\DataAccessObject.dll
+C:\Users\ADMIN\Desktop\DoThanhBo_Net1606_A03\DataAccessObject\obj\Debug\net6.0\refint\DataAccessObject.dll
+C:\Users\ADMIN\Desktop\DoThanhBo_Net1606_A03\DataAccessObject\obj\Debug\net6.0\DataAccessObject.pdb
+C:\Users\ADMIN\Desktop\DoThanhBo_Net1606_A03\DataAccessObject\obj\Debug\net6.0\ref\DataAccessObject.dll
+C:\Users\ADMIN\Desktop\DoThanhBo_Net1606_A03\DataAccessObject\bin\Debug\net6.0\DataAccessObject.runtimeconfig.json
+C:\Users\ADMIN\Desktop\DoThanhBo_Net1606_A03\DataAccessObject\obj\Debug\net6.0\DataAccessObject.csproj.AssemblyReference.cache
+C:\Users\ADMIN\Desktop\DoThanhBo_Net1606_A03\DataAccessObject\obj\Debug\net6.0\DataAccessObject.genruntimeconfig.cache

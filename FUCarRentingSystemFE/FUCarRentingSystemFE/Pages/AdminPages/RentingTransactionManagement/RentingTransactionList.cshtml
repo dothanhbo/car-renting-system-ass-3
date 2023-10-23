@@ -1,0 +1,80 @@
+﻿@page
+@model FUCarRentingSystemFE.Pages.AdminPages.RentingTransactionManagement.RentingTransactionListModel
+
+@{
+    ViewData["Title"] = "RentingTransactionList";
+    Layout = "_AdminLayout";
+}
+
+<h1>RentingTransactionList</h1>
+<form method="post">
+    <div class="form-group">
+        <label asp-for="startDate" class="control-label">Search:</label>
+        <input asp-for="startDate" class="form-control" value="@DateTime.Today.ToString("yyyy-MM-dd")" type="date" />
+    </div>
+    <div class="form-group">
+        <label asp-for="endDate" class="control-label">Search:</label>
+        <input asp-for="endDate" class="form-control" value="@DateTime.Today.ToString("yyyy-MM-dd")" type="date" />
+    </div>
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.RentingTransaction[0].RentingDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RentingTransaction[0].TotalPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RentingTransaction[0].RentingStatus)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RentingTransaction[0].Customer)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.RentingTransaction != null)
+        {
+            @foreach (var item in Model.RentingTransaction)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FormattedRentingDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TotalPrice)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RentingStatus)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Customer.CustomerName)
+                    </td>
+                    <td>
+                        <a asp-page="./RentingDetailList" asp-route-id="@item.RentingTransationId">Details</a>
+                    </td>
+                </tr>
+            }
+
+        }
+        else
+        {
+            <p>No data available</p>
+        }      
+    </tbody>
+</table>
+<form method="post" asp-page-handler="createreport">
+    @foreach (var transaction in Model.RentingTransaction)
+    {
+        <input type="hidden" name="RentingDate" value="@transaction.RentingDate" />
+        <input type="hidden" name="Price" value="@transaction.TotalPrice" />
+        <input type="hidden" name="RentingStatus" value="@transaction.RentingStatus" />
+        <input type="hidden" name="Customer" value="@transaction.Customer.CustomerName" />
+        <!-- Repeat this line for each property you want to include -->
+    }
+    <button type="submit" class="btn btn-primary">Create Report</button>
+</form>

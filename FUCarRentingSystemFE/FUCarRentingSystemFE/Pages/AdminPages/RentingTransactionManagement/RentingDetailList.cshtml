@@ -1,0 +1,47 @@
+﻿@page
+@model FUCarRentingSystemFE.Pages.AdminPages.RentingTransactionManagement.RentingDetailListModel
+
+@{
+    ViewData["Title"] = "RentingDetailList";
+    Layout = "_AdminLayout";
+}
+
+<h1>Renting Detail</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.RentingDetail[0].StartDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RentingDetail[0].EndDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RentingDetail[0].Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RentingDetail[0].Car)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.RentingDetail) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FormattedStartDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FormattedEndDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Car.CarName)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

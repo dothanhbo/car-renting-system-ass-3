@@ -1,0 +1,101 @@
+﻿@page
+@model FUCarRentingSystemFE.Pages.CustomerPages.CartModel
+@{
+    ViewData["Title"] = "Cart";
+}
+<style>
+    /* Style for the alert message */
+    .alert {
+        background-color: #f44336;
+        color: white;
+        padding: 10px;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    /* Style for the table */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    /* Style for table headers */
+    th {
+        background-color: #f2f2f2;
+        text-align: left;
+        padding: 8px;
+    }
+
+    /* Style for table cells */
+    td {
+        padding: 8px;
+    }
+
+    /* Style for the "Update" and "Buy now" buttons */
+    input[type="submit"] {
+        background-color: #008CBA;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        cursor: pointer;
+    }
+
+    /* Style for the "Continue Shopping" link */
+    a {
+        display: inline-block;
+        margin-top: 10px;
+        padding: 5px 10px;
+        text-decoration: none;
+        border-radius: 3px;
+    }
+</style>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert">@TempData["Message"]</div>
+}
+<h3>Cart</h3>
+    <form method="post" asp-page="cart">
+        <table border="1">
+            <tr>
+                <th>Action</th>
+                <th>Name</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Total Days</th></>
+                <th>Price</th>
+                <th>Sub Total</th>
+            </tr>
+            @foreach (var item in Model.cart)
+            {
+                <tr align="center">
+                    <td align="center">
+                    <a asp-page="cart" asp-page-handler="delete" asp-route-id="@item.CarInformation.CarId">X</a>
+                    </td>
+                <td>@item.CarInformation.CarName</td>
+                <td class="form-group">
+                    <label asp-for="@item.StartDate"></label>
+                    <input name="startDate" asp-for="@item.StartDate" class="form-control" min="@DateTime.Now.ToString("yyyy-MM-dd")" value="@item.StartDate.ToString("yyyy-MM-dd")" type="date" oninput="calculateDays(this)" />
+                </td>
+                <td class="form-group">
+                    <label asp-for="@item.EndDate"></label>
+                    <input name="endDate" asp-for="@item.EndDate" class="form-control" min="@DateTime.Now.ToString("yyyy-MM-dd")" value="@item.EndDate.ToString("yyyy-MM-dd")"  type="date" oninput="calculateDays(this)" />
+                </td>
+                <td id="daysCount">@item.TotalDays</td>
+                <input type="hidden" name="daysCount" value="@item.TotalDays" />
+                <td id="price" value=@item.CarInformation.CarRentingPricePerDay>@item.CarInformation.CarRentingPricePerDay</td>
+                <td>@(item.CarInformation.CarRentingPricePerDay * item.TotalDays)</td>
+                <input type="hidden" name="total" value="@(item.CarInformation.CarRentingPricePerDay * item.TotalDays)" />
+                </tr>
+            }
+            <tr>
+                <td colspan="6" align="right">Total</td>
+                <td align="center">@Model.Total</td>
+            </tr>
+       
+        </table>
+    <input type="submit" value="Update" asp-page-handler="update" />
+    <input type="submit" value="Rent now" asp-page-handler="buynow" asp-route-total="@Model.Total"/>
+    </form>
+
+    <a asp-page="/CustomerPages/CarInformation">Continue Renting</a>

@@ -1,0 +1,109 @@
+﻿@page
+@model FUCarRentingSystemFE.Pages.CustomerPages.CarInformationModel
+
+@{
+    ViewData["Title"] = "CarInformation";
+}
+<h1>CarInformation</h1>
+<style>
+    /* Style for the notification container */
+    .notification {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background-color: #333;
+        color: #fff;
+        padding: 10px 20px;
+        border-radius: 5px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        z-index: 9999; /* Ensure it appears on top of other elements */
+    }
+
+    /* Style for the notification text */
+    .notification-text {
+        font-size: 16px;
+    }
+</style>
+<form method="post">
+    <div class="form-group">
+        <label asp-for="Keyword" class="control-label">Search:</label>
+        <input asp-for="Keyword" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
+@if (Model.CustomerMessage != null)
+{
+    <div class="notification">
+        <span class="notification-text">@Model.CustomerMessage</span>
+    </div>
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.CarInformation[0].CarName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CarInformation[0].CarDescription)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CarInformation[0].NumberOfDoors)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CarInformation[0].SeatingCapacity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CarInformation[0].FuelType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CarInformation[0].Year)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CarInformation[0].CarRentingPricePerDay)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CarInformation[0].Manufacturer.ManufacturerName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CarInformation[0].Supplier.SupplierName)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.CarInformation) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CarName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CarDescription)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumberOfDoors)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SeatingCapacity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FuelType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Year)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CarRentingPricePerDay)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Manufacturer.ManufacturerName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Supplier.SupplierName)
+            </td>
+            <td>
+                 <a asp-page="/CustomerPages/Cart" asp-page-handler="buynow" asp-route-id="@item.CarId">Rent</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
