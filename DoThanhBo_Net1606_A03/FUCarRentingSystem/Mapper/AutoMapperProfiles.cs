@@ -10,6 +10,8 @@ namespace FUCarRentingSystem.Mapper
         {
             CreateMap<CustomerDto, Customer>().ReverseMap();
             CreateMap<CarInformationDto, CarInformation>().ReverseMap();
+            CreateMap<RentingDetailDto, RentingDetail>().ReverseMap();
+            CreateMap<RentingTransactionDto, RentingTransaction>().ReverseMap();
         }
     }
 }

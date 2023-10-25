@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using System.Net.Http;
 using System.Text;
 using DocumentFormat.OpenXml.Office2010.Excel;
+using System.Net.Http.Headers;
 
 namespace FUCarRentingSystemFE.Pages.CustomerPages
 {
@@ -25,8 +26,8 @@ namespace FUCarRentingSystemFE.Pages.CustomerPages
         public decimal Total { get; set; }
         public async Task<IActionResult> OnGet()
         {
-            int? userId = HttpContext.Session.GetInt32("UserId") ?? 0;
-            if (userId == 0)
+            int? customerId = HttpContext.Session.GetInt32("CustomerId") ?? 0;
+            if (customerId == 0)
                 return RedirectToPage("/NotAuthorized");
             cart = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart");
             Total = cart.Sum(i => i.CarInformation.CarRentingPricePerDay * i.TotalDays);
@@ -109,7 +110,9 @@ namespace FUCarRentingSystemFE.Pages.CustomerPages
 
         public async Task<IActionResult> OnPostBuynow()
         {
-            int? userId = HttpContext.Session.GetInt32("UserId");
+            int? customerId = HttpContext.Session.GetInt32("CustomerId") ?? 0;
+            if (customerId == 0)
+                return RedirectToPage("/NotAuthorized");
             cart = SessionHelper.GetObjectFromJson<List<Item>>(HttpContext.Session, "cart");
             Total = cart.Sum(i => i.CarInformation.CarRentingPricePerDay * i.TotalDays);
             if (Total <= 0)
@@ -117,17 +120,18 @@ namespace FUCarRentingSystemFE.Pages.CustomerPages
                 HttpContext.Session.SetString("CustomerMessage", "Can not rent. Nothing for rent!");
                 return RedirectToPage("/CustomerPages/CarInformation");
             }
-            List<CheckCarExist> checkCarExistList = new List<CheckCarExist>();
+            List<RentingDetail> rentingDetails = new List<RentingDetail>();
             foreach(Item item in cart)
             {
-                checkCarExistList.Add(new CheckCarExist
+                rentingDetails.Add(new RentingDetail
                 {
                     CarId = item.CarInformation.CarId,
                     StartDate = item.StartDate,
-                    EndDate = item.EndDate
+                    EndDate = item.EndDate,
+                    RentingTransactionId =1
                 });
             }
-            List<bool> checkList = await CheckCarExist(checkCarExistList);
+            List<bool> checkList = await CheckCarExist(rentingDetails);
             if (checkList.Contains(false))
             {
                 string context= "Can not rent, car ";
@@ -145,7 +149,7 @@ namespace FUCarRentingSystemFE.Pages.CustomerPages
             RentingTransaction rentingTransaction = new RentingTransaction();
             rentingTransaction.RentingDate = DateTime.Now;
             rentingTransaction.TotalPrice = Total;
-            rentingTransaction.CustomerId = userId.Value;
+            rentingTransaction.CustomerId = customerId.Value;
             rentingTransaction.RentingStatus = 1;
             foreach(var item in cart)
             {
@@ -161,7 +165,9 @@ namespace FUCarRentingSystemFE.Pages.CustomerPages
                     }
                 );  
             }
+            string token = HttpContext.Session.GetString("token");
             var client = _httpClientFactory.CreateClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             client.BaseAddress = new Uri("http://localhost:5071/api/");
             var carInfoJson = JsonConvert.SerializeObject(rentingTransaction);
             var content = new StringContent(carInfoJson, Encoding.UTF8, "application/json");
@@ -195,41 +201,38 @@ namespace FUCarRentingSystemFE.Pages.CustomerPages
         private async Task<CarInformation> GetCarInformationAsync(int id)
         {
             CarInformation carInformation = new CarInformation();
+            string token = HttpContext.Session.GetString("token");
             try
             {
                 var client = _httpClientFactory.CreateClient();
-                client.BaseAddress = new Uri("http://localhost:5173/api/"); // Adjust the base URL as needed.
-
-                // Send an HTTP GET request to retrieve the list of CarInformation from the API.
-                var response = await client.GetAsync("CarInformation/id?id=" + id.ToString()); // Use the appropriate endpoint URL.
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                client.BaseAddress = new Uri("http://localhost:5071/api/");
+                var response = await client.GetAsync("CarInformation/" + id.ToString());
 
                 if (response.IsSuccessStatusCode)
                 {
-                    // Read the response content as a JSON string.
                     var responseContent = await response.Content.ReadAsStringAsync();
-
-                    // Deserialize the JSON response into a list of CarInformation.
                     carInformation = JsonConvert.DeserializeObject<CarInformation>(responseContent);
                 }
                 else
                 {
-                    // Handle the error accordingly.
                     ModelState.AddModelError(string.Empty, "Failed to retrieve car information.");
                 }
             }
             catch (Exception ex)
             {
-                // Handle any exceptions that may occur during the API call.
                 ModelState.AddModelError(string.Empty, "An error occurred while processing your request.");
             }
             return carInformation;
         }
-        private async Task<List<bool>> CheckCarExist(List<CheckCarExist> checkCarExists)
+        private async Task<List<bool>> CheckCarExist(List<RentingDetail> rentingDetails)
         {
+            string token = HttpContext.Session.GetString("token");
             List<bool> carExist = new List<bool>();
             var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri("http://localhost:5173/api/");
-            var carInfoJson = JsonConvert.SerializeObject(checkCarExists);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            client.BaseAddress = new Uri("http://localhost:5071/api/");
+            var carInfoJson = JsonConvert.SerializeObject(rentingDetails);
             var content = new StringContent(carInfoJson, Encoding.UTF8, "application/json");
             var response = await client.PostAsync("RentingDetail/check", content);
             if (response.IsSuccessStatusCode)

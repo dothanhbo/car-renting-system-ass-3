@@ -74,7 +74,7 @@ namespace FUCarRentingSystemFE.Pages.AdminPages.CustomerManagement
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Failed to retrieve suppliers.");
+                    ModelState.AddModelError(string.Empty, "Failed to update customer.");
                 }
             }
             catch (Exception ex)

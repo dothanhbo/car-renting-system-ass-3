@@ -10,7 +10,7 @@ namespace DataAcessObjects.DAO
 {
     public class CustomerDAO
     {
-        public async Task<Customer?> LoginAsync(String email, String password)
+        public async Task<Customer?> LoginAsync(string email, string password)
         {
             using (var context = new FUCarRentingManagementContext())
             {
@@ -52,6 +52,34 @@ namespace DataAcessObjects.DAO
                     context.Entry(_customer).CurrentValues.SetValues(customer);
                     await context.SaveChangesAsync();
                 }
+            }
+        }
+        public async Task DeleteAsync(int customerId)
+        {
+            using (var context = new FUCarRentingManagementContext())
+            {
+                var customer = await context.Customers.Where(x => x.CustomerId == customerId).ToListAsync();
+                context.Entry(customer[0]).State = EntityState.Deleted;
+                await context.SaveChangesAsync();
+            }
+        }
+        public async Task<bool> CheckForDuplicateEmail(String email)
+        {
+            using (var context = new FUCarRentingManagementContext())
+            {
+                var customer = await context.Customers.FirstOrDefaultAsync(od => od.Email == email);
+                if (customer == null)
+                    return true;
+                else
+                    return false;
+            }
+        }
+        public async Task AddCustomerAsync(Customer customer)
+        {
+            using (var context = new FUCarRentingManagementContext())
+            {
+                await context.Customers.AddAsync(customer);
+                await context.SaveChangesAsync();
             }
         }
     }

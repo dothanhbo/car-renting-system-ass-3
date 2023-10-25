@@ -10,5 +10,7 @@ namespace Repositories.Repositories
     public interface IRentingDetailRepository
     {
         Task<List<RentingDetail>?> GetRentingDetailsByTransactionId(int transactionId);
+        Task AddRentingDetailAsync(RentingDetail rentingDetail);
+        Task<List<bool>> CheckCarAvalable(List<RentingDetail> rentingDetails);
     }
 }

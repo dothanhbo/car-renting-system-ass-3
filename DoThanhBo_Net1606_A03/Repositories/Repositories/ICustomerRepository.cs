@@ -14,5 +14,8 @@ namespace Repositories.Repositories
         Task<List<Customer>?> SearchCustomersAsync(string keyword);
         Task<Customer?> GetCustomerAsync(int id);
         Task UpdateCustomerAsync(Customer customer);
+        Task DeleteAsync(int customerId);
+        Task<bool> CheckForDuplicateEmail(String email);
+        Task AddCustomerAsync(Customer customer);
     }
 }

@@ -59,13 +59,15 @@ namespace FUCarRentingSystemFE.Pages.AdminPages.RentingTransactionManagement
         }
         public async Task<IActionResult> OnPostAsync()
         {
-            if (startDate == null && endDate == null)
-                return RedirectToPage("./Index");
+            if (startDate == null || endDate == null)
+                return RedirectToPage("./RentingTransactionList");
             else
                 try
                 {
+                    string token = HttpContext.Session.GetString("token") ?? null;
                     var client = _httpClientFactory.CreateClient();
-                    client.BaseAddress = new Uri("http://localhost:5173/api/");
+                    client.BaseAddress = new Uri("http://localhost:5071/api/");
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                     var response = await client.GetAsync("RentingTransaction/search?startDate=" + startDate.Value.ToString("MM-dd-yyyy") + "&endDate=" + endDate.Value.ToString("MM-dd-yyyy"));
 
                     if (response.IsSuccessStatusCode)

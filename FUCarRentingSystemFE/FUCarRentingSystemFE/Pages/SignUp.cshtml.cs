@@ -38,7 +38,7 @@ namespace FUCarRentingSystemFE.Pages
             try
             {
                 var client = _httpClientFactory.CreateClient();
-                client.BaseAddress = new Uri("http://localhost:5173/api/"); // Adjust the base URL as needed.
+                client.BaseAddress = new Uri("http://localhost:5071/api/"); // Adjust the base URL as needed.
                 // Send an HTTP GET request to retrieve the list of CarInformation from the API.
                 Customer.CustomerStatus = 1;
                 var customerInfoJson = JsonConvert.SerializeObject(Customer);

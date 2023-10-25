@@ -26,5 +26,36 @@ namespace DataAcessObjects.DAO
                 return rentingTransactions;
             }
         }
+        public async Task<List<RentingTransaction>?> SearchRentingTransactions(DateTime startDate, DateTime endDate)
+        {
+            using (var context = new FUCarRentingManagementContext())
+            {
+                var rentingTransactions = await context.RentingTransactions.Where(od => od.RentingDate >= startDate && od.RentingDate <= endDate).OrderByDescending(od => od.RentingDate).ThenByDescending(od => od.TotalPrice).ToListAsync();
+                return rentingTransactions;
+            }
+        }
+
+        public async Task<int> GetNextRentingTransactionIdAsync()
+        {
+
+            int nextId = 1;
+            using (var context = new FUCarRentingManagementContext())
+            {
+                var maxId = await context.RentingTransactions.MaxAsync(rt => (int?)rt.RentingTransationId);
+                if (maxId.HasValue)
+                {
+                    nextId = maxId.Value + 1;
+                }
+            }
+            return nextId;
+        }
+        public async Task AddRentingTransactionAsync(RentingTransaction rentingTransaction)
+        {
+            using (var context = new FUCarRentingManagementContext())
+            {
+                await context.RentingTransactions.AddAsync(rentingTransaction);
+                await context.SaveChangesAsync();
+            }
+        }
     }
 }

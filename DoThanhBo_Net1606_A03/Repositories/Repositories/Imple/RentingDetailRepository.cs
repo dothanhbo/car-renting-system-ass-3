@@ -30,5 +30,9 @@ namespace Repositories.Repositories.Imple
             }
             return rentingDetails;
         }
+        public async Task AddRentingDetailAsync(RentingDetail rentingDetail)
+            => await rentingDetailDAO.AddRentingDetailAsync(rentingDetail);
+        public async Task<List<bool>> CheckCarAvalable(List<RentingDetail> rentingDetails)
+            => await rentingDetailDAO.CheckCarAvalable(rentingDetails);
     }
 }

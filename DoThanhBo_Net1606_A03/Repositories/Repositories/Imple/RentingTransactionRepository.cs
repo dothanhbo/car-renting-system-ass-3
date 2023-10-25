@@ -44,6 +44,21 @@ namespace Repositories.Repositories.Imple
             }
             return rentingTransactions;
         }
-
+        public async Task<List<RentingTransaction>?> SearchRentingTransactions(DateTime startDate, DateTime endDate)
+        {
+            var rentingTransactions = await rentingTransactionDAO.SearchRentingTransactions(startDate, endDate);
+            if (rentingTransactions != null)
+            {
+                foreach (RentingTransaction rentingTransaction in rentingTransactions)
+                {
+                    rentingTransaction.Customer = await customerDAO.GetCustomerAsync(rentingTransaction.CustomerId);
+                }
+            }
+            return rentingTransactions;
+        }
+        public async Task<int> GetNextRentingTransactionIdAsync()
+            => await rentingTransactionDAO.GetNextRentingTransactionIdAsync();
+        public async Task AddRentingTransactionAsync(RentingTransaction rentingTransaction)
+            => await rentingTransactionDAO.AddRentingTransactionAsync(rentingTransaction);
     }
 }

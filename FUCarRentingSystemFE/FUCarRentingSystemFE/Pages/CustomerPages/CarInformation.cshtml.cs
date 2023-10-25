@@ -48,6 +48,9 @@ namespace FUCarRentingSystemFE.Pages.CustomerPages
                 {
                     var responseContent = await response.Content.ReadAsStringAsync();
                     CarInformation = JsonConvert.DeserializeObject<List<CarInformation>>(responseContent);
+                    foreach (CarInformation carInformation in CarInformation)
+                        if (carInformation.CarStatus == 0)
+                            CarInformation.Remove(carInformation);
                 }
                 else
                 {
@@ -78,6 +81,9 @@ namespace FUCarRentingSystemFE.Pages.CustomerPages
                     {
                         var responseContent = await response.Content.ReadAsStringAsync();
                         CarInformation = JsonConvert.DeserializeObject<List<CarInformation>>(responseContent);
+                        foreach (CarInformation carInformation in CarInformation)
+                            if (carInformation.CarStatus == 0)
+                                CarInformation.Remove(carInformation);
                     }
                     else
                     {

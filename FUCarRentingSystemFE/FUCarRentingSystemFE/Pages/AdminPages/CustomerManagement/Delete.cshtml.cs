@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BusinessObjects.Models;
 using Newtonsoft.Json;
+using System.Net.Http.Headers;
 
 namespace FUCarRentingSystemFE.Pages.AdminPages.CustomerManagement
 {
@@ -27,13 +28,13 @@ namespace FUCarRentingSystemFE.Pages.AdminPages.CustomerManagement
             string adminId = HttpContext.Session.GetString("Admin") ?? null;
             if (adminId != "Admin")
                 return RedirectToPage("/NotAuthorized");
+            string token = HttpContext.Session.GetString("token") ?? null;
             try
             {
                 var client = _httpClientFactory.CreateClient();
-                client.BaseAddress = new Uri("http://localhost:5173/api/"); // Adjust the base URL as needed.
-
-                // Send an HTTP GET request to retrieve the list of CarInformation from the API.
-                var response = await client.GetAsync("Customer/id?id=" + id.ToString()); // Use the appropriate endpoint URL.
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                client.BaseAddress = new Uri("http://localhost:5071/api/");
+                var response = await client.GetAsync("Customer/" + id.ToString()); // Use the appropriate endpoint URL.
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -57,13 +58,13 @@ namespace FUCarRentingSystemFE.Pages.AdminPages.CustomerManagement
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(int? id)
+        public async Task<IActionResult> OnPostAsync()
         {
+            string token = HttpContext.Session.GetString("token") ?? null;
             var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri("http://localhost:5173/api/"); // Adjust the base URL as needed.
-
-            // Send an HTTP GET request to retrieve the list of CarInformation from the API.
-            var response = await client.DeleteAsync("Customer?carId=" + Customer.CustomerId.ToString()); // Use the appropriate endpoint URL
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            client.BaseAddress = new Uri("http://localhost:5071/api/"); 
+            var response = await client.DeleteAsync("Customer/" + Customer.CustomerId.ToString()); 
 
             if (response.IsSuccessStatusCode)
             {

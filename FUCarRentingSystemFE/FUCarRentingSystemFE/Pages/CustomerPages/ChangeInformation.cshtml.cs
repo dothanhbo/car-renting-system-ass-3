@@ -28,6 +28,7 @@ namespace FUCarRentingSystemFE.Pages.CustomerPages
 
         public async Task<IActionResult> OnGet()
         {
+
             int? customerId = HttpContext.Session.GetInt32("CustomerId") ?? 0;
             if (customerId == 0)
                 return RedirectToPage("/NotAuthorized");
@@ -58,10 +59,12 @@ namespace FUCarRentingSystemFE.Pages.CustomerPages
 
         public async Task<IActionResult> OnPostAsync()
         {
+            string token = HttpContext.Session.GetString("token");
             try
             {
                 var client = _httpClientFactory.CreateClient();
-                client.BaseAddress = new Uri("http://localhost:5173/api/"); 
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                client.BaseAddress = new Uri("http://localhost:5071/api/"); 
                 var customerInfoJson = JsonConvert.SerializeObject(Customer);
                 var content = new StringContent(customerInfoJson, Encoding.UTF8, "application/json");
                 var response = await client.PutAsync("Customer", content);
@@ -71,7 +74,7 @@ namespace FUCarRentingSystemFE.Pages.CustomerPages
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Failed to retrieve suppliers.");
+                    ModelState.AddModelError(string.Empty, "This email has beed used!.");
                 }
             }
             catch (Exception ex)

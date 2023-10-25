@@ -27,5 +27,11 @@ namespace Repositories.Repositories.Imple
             => await customerDAO.GetCustomerAsync(id);
         public async Task UpdateCustomerAsync(Customer customer)
             => await customerDAO.UpdateCustomerAsync(customer);
+        public async Task DeleteAsync(int customerId)
+            => await customerDAO.DeleteAsync(customerId);
+        public async Task<bool> CheckForDuplicateEmail(String email)
+            => await customerDAO.CheckForDuplicateEmail(email);
+        public async Task AddCustomerAsync(Customer customer)
+            => await customerDAO.AddCustomerAsync(customer);
     }
 }

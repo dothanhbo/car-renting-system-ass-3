@@ -52,7 +52,7 @@ namespace FUCarRentingSystem.Controllers
             }); ;
         }
         [HttpGet]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAllCustomersAsync()
         {
             var result = await customerRepository.GetAllCustomersAsync();
@@ -78,6 +78,31 @@ namespace FUCarRentingSystem.Controllers
         {
             var customer = mapper.Map<Customer>(customerDto);
             await customerRepository.UpdateCustomerAsync(customer);
+            return Ok();
+        }
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> DeleteAsync(int id)
+        {
+            await customerRepository.DeleteAsync(id);
+            return Ok();
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddCustomer(CustomerDto customerDto)
+        {
+            var customer = mapper.Map<Customer>(customerDto);
+            IConfiguration config = new ConfigurationBuilder()
+           .SetBasePath(Directory.GetCurrentDirectory())
+           .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+           .Build();
+            string adminEmail = config["AdminAccount:Email"];
+            if (customerRepository.CheckForDuplicateEmail(customer.Email).Result == false || customer.Email.ToLower().Equals(adminEmail.ToLower()))
+                return BadRequest(new ApiResponse
+                {
+                    Success = false,
+                    Message = "This Email has been used!"
+                });
+            await customerRepository.AddCustomerAsync(customer);
             return Ok();
         }
     }

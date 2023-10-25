@@ -11,5 +11,8 @@ namespace Repositories.Repositories
     {
         Task<List<RentingTransaction>?> GetAllRentingTransactionsAsync();
         Task<List<RentingTransaction>?> GetRentingTransactionsByCustomerId(int customerId);
+        Task<List<RentingTransaction>?> SearchRentingTransactions(DateTime startDate, DateTime endDate);
+        Task<int> GetNextRentingTransactionIdAsync();
+        Task AddRentingTransactionAsync(RentingTransaction rentingTransaction);
     }
 }

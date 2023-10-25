@@ -58,7 +58,7 @@ namespace FUCarRentingSystem.Controllers
             return Ok();
         }
         [HttpGet("search")]
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         public async Task<IActionResult> SearchCarsAsync(string keyword)
         {
             var result = await carInformationRepository.SearchCarsAsync(keyword);

@@ -4,12 +4,10 @@
     {
         public int CustomerId { get; set; }
         public string CustomerName { get; set; } = default!;
-        public string Mobile { get; set; } = default!;
-        public DateTime Birthday { get; set; }
-        public string IdentityCard { get; set; } = default!;
-        public string LicenceNumber { get; set; } = default!;
-        public DateTime LicenceDate { get; set; }
+        public string Telephone { get; set; } = default!;
         public string Email { get; set; } = null!;
-        public string Password { get; set; } = null!;
+        public DateTime CustomerBirthday { get; set; }
+        public byte CustomerStatus { get; set; }
+        public string? Password { get; set; }
     }
 }
